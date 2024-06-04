@@ -1,4 +1,12 @@
 #!/bin/bash
+   echo -e "\033[0;32m"
+   echo "  _____          _____                     _ "
+   echo " |  __ \        / ____|                   | |"
+   echo " | |  | |_ __  | (___   __ _  ___  ___  __| |"
+   echo " | |  | | '__|  \___ \ / _ |/ _ \/ _ \/ _ |"
+   echo " | |__| | |     ____) | (_| |  __/  __/ (_| |"
+   echo " |_____/|_|    |_____/ \__,_|\___|\___|\__,_|"
+   echo -e "\033[0m"
 export DEBIAN_FRONTEND=noninteractive
 apt-get install -y libpq-dev
 # Define console colors
