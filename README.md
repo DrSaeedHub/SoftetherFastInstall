@@ -7,7 +7,6 @@ This repository contains a script (`se-install.sh`) that automates the installat
 Before running the installation script, please ensure that your system meets the following requirements:
 - A Linux distribution (Debian/Ubuntu preferred as the script uses `apt-get`)
 - `curl` must be installed on your system
-- Superuser privileges (root access)
 
 ## Installation
 
