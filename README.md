@@ -14,7 +14,7 @@ Before running the installation script, please ensure that your system meets the
 To install SoftEther VPN Server using the `se-install.sh` script, you can run the following command in your terminal. This command uses `curl` to download the script and executes it with `bash`. Ensure you have internet connectivity and the ability to access GitHub where the script is hosted.
 
 ```bash
-sudo bash <(curl -Ls https://raw.githubusercontent.com/DrSaeedHub/SoftetherFastInstall/main/se-install.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/DrSaeedHub/SoftetherFastInstall/main/se-install.sh)
 ```
 
 ## What the Script Does
