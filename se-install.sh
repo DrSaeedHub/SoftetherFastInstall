@@ -66,7 +66,7 @@ fi
 
 # Download SoftEther | Version 4.38 | Build 9760
 printf "\nDownloading release: ${RED}4.38 RTM${NC} | Build ${RED}9760${NC}\n\n"
-wget -O vpnserver.tar.gz https://www.softether-download.com/files/softether/v4.38-9760-rtm-2021.08.17-tree/Linux/SoftEther_VPN_Server/64bit_-_Intel_x64_or_AMD64/softether-vpnserver-v4.38-9760-rtm-2021.08.17-linux-x64-64bit.tar.gz
+wget -O vpnserver.tar.gz https://www.softether-download.com/files/softether/v4.42-9798-rtm-2023.06.30-tree/Linux/SoftEther_VPN_Server/64bit_-_Intel_x64_or_AMD64/softether-vpnserver-v4.42-9798-rtm-2023.06.30-linux-x64-64bit.tar.gz
 tar -xzf vpnserver.tar.gz
 cd vpnserver
 echo $'1\n1\n1' | make &&
