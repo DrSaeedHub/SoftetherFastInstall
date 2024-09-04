@@ -1,12 +1,12 @@
 #!/bin/bash
-   echo -e "\033[0;32m"
-   echo "  _____          _____                     _ "
-   echo " |  __ \        / ____|                   | |"
-   echo " | |  | |_ __  | (___   __ _  ___  ___  __| |"
-   echo " | |  | | '__|  \___ \ / _ |/ _ \/ _ \/ _ |"
-   echo " | |__| | |     ____) | (_| |  __/  __/ (_| |"
-   echo " |_____/|_|    |_____/ \__,_|\___|\___|\__,_|"
-   echo -e "\033[0m"
+echo -e "\033[0;32m"
+echo "  _____          _____                     _ "
+echo " |  __ \        / ____|                   | |"
+echo " | |  | |_ __  | (___   __ _  ___  ___  __| |"
+echo " | |  | | '__|  \___ \ / _ |/ _ \/ _ \/ _ |"
+echo " | |__| | |     ____) | (_| |  __/  __/ (_| |"
+echo " |_____/|_|    |_____/ \__,_|\___|\___|\__,_|"
+echo -e "\033[0m"
 export DEBIAN_FRONTEND=noninteractive
 apt-get install -y libpq-dev
 # Define console colors
@@ -28,8 +28,8 @@ if [ -d "/tmp/softether-autoinstall" ]; then
 fi
 
 # Check for init script
-if
-  [ -f "/etc/init.d/vpnserver" ]; then rm /etc/init.d/vpnserver;
+if [ -f "/etc/init.d/vpnserver" ]; then
+  rm /etc/init.d/vpnserver;
 fi
 
 # Remove vpnserver from systemd
@@ -64,10 +64,10 @@ if [ "" == "$PKG_OK" ]; then
   exit 1
 fi
 
-# Download SoftEther | Version 4.42 | Build 9798
-printf "\nDownloading release: ${RED}4.38 RTM${NC} | Build ${RED}9760${NC}\n\n"
-wget -O vpnserver.tar.gz https://www.softether-download.com/files/softether/v4.42-9798-rtm-2023.06.30-tree/Linux/SoftEther_VPN_Server/64bit_-_Intel_x64_or_AMD64/softether-vpnserver-v4.42-9798-rtm-2023.06.30-linux-x64-64bit.tar.gz
-tar -xzf vpnserver.tar.gz
+# Download SoftEther | Version 5.02 | Build 5185
+printf "\nDownloading release: ${RED}5.02${NC} | Build ${RED}5185${NC}\n\n"
+wget -O vpnserver.tar.xz https://github.com/SoftEtherVPN/SoftEtherVPN/releases/download/5.02.5185/SoftEtherVPN-5.02.5185.tar.xz
+tar -xJf vpnserver.tar.xz
 cd vpnserver
 echo $'1\n1\n1' | make &&
 cd /tmp/softether-autoinstall && mv vpnserver/ /opt
