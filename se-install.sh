@@ -53,7 +53,7 @@ cd /tmp/softether-autoinstall
 
 # Download SoftEther | Version 4.43 | Build 9799
 printf "\nDownloading release: ${RED}4.43 RTM${NC} | Build ${RED}9799${NC}\n\n"
-wget -O vpnserver.tar.gz http://www.softether-download.com/files/softether/v4.43-9799-beta-2023.08.31-tree/Linux/SoftEther_VPN_Client/64bit_-_Intel_x64_or_AMD64/softether-vpnclient-v4.43-9799-beta-2023.08.31-linux-x64-64bit.tar.gz
+wget -O vpnserver.tar.gz https://www.softether-download.com/files/softether/v4.43-9799-beta-2023.08.31-tree/Linux/SoftEther_VPN_Client/64bit_-_Intel_x64_or_AMD64/softether-vpnclient-v4.43-9799-beta-2023.08.31-linux-x64-64bit.tar.gz
 
 # Extract the archive
 tar -xzf vpnserver.tar.gz
