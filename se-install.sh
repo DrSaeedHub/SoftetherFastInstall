@@ -27,7 +27,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # Variables
-SOFTETHER_URL="https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/releases/latest/download/softether-vpnserver-linux-x64-64bit.tar.gz"
+SOFTETHER_URL="https://www.softether-download.com/files/softether/v4.43-9799-beta-2023.08.31-tree/Linux/SoftEther_VPN_Server/64bit_-_Intel_x64_or_AMD64/softether-vpnserver-v4.43-9799-beta-2023.08.31-linux-x64-64bit.tar.gz"
 INSTALL_DIR="/usr/local/vpnserver"
 
 # Update system packages
