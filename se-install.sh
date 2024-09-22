@@ -1,111 +1,101 @@
 #!/bin/bash
 
-   echo -e "\033[0;32m"
-   echo "  _____          _____                     _ "
-   echo " |  __ \        / ____|                   | |"
-   echo " | |  | |_ __  | (___   __ _  ___  ___  __| |"
-   echo " | |  | | '__|  \___ \ / _ |/ _ \/ _ \/ _ |"
-   echo " | |__| | |     ____) | (_| |  __/  __/ (_| |"
-   echo " |_____/|_|    |_____/ \__,_|\___|\___|\__,_|"
-   echo -e "\033[0m"
+# SoftEther VPN Server installation script for Ubuntu 24.04 (64-bit Intel/AMD)
+# ASCII Art Header
+echo -e "\033[0;32m"
+echo "  _____          _____                     _ "
+echo " |  __ \        / ____|                   | |"
+echo " | |  | |_ __  | (___   __ _  ___  ___  __| |"
+echo " | |  | | '__|  \___ \ / _ |/ _ \/ _ \/ _ |"
+echo " | |__| | |     ____) | (_| |  __/  __/ (_| |"
+echo " |_____/|_|    |_____/ \__,_|\___|\___|\__,_|"
+echo -e "\033[0m"
 
-export DEBIAN_FRONTEND=noninteractive
-
-# Perform system update and upgrade
-sudo apt update && sudo apt upgrade -y
-
-# Define console colors
-RED='\033[0;31m'
-NC='\033[0m' # No Color
-
-# Execute as sudo
-(( EUID != 0 )) && exec sudo -- "$0" "$@"
-clear
-
-# REMOVE PREVIOUS INSTALL
-# Check for SE install folder
-if [ -d "/opt/vpnserver" ]; then
-  rm -rf /opt/vpnserver > /dev/null 2>&1
+# Ensure script is run as root
+if [[ $EUID -ne 0 ]]; then
+  echo -e "\033[0;31mThis script must be run as root. Please run again with 'sudo'.\033[0m"
+  exit 1
 fi
 
-# Clean up any previous attempts
-if [ -d "/tmp/softether-autoinstall" ]; then
-  rm -rf /tmp/softether-autoinstall > /dev/null 2>&1
+
+set -e
+
+# Ensure the script is run as root
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root. Please try again with sudo."
+   exit 1
 fi
 
-# Remove old init script
-if [ -f "/etc/init.d/vpnserver" ]; then
-  rm /etc/init.d/vpnserver
-fi
+# Variables
+SOFTETHER_URL="https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/releases/latest/download/softether-vpnserver-linux-x64-64bit.tar.gz"
+INSTALL_DIR="/usr/local/vpnserver"
 
-# Remove old systemd service if exists
-if [ -f "/etc/systemd/system/vpnserver.service" ]; then
-  rm /etc/systemd/system/vpnserver.service
-fi
+# Update system packages
+echo "Updating system packages..."
+apt update && apt upgrade -y
 
-# Perform apt update & install necessary software
-apt-get update -y
-apt-get install -y wget net-tools build-essential checkinstall dos2unix libssl-dev libreadline-dev zlib1g-dev
+# Install dependencies
+echo "Installing required dependencies..."
+apt install -y build-essential libreadline-dev libssl-dev libncurses5-dev zlib1g-dev make
 
-# Create working directory
-mkdir -p /tmp/softether-autoinstall
-cd /tmp/softether-autoinstall
+# Download the latest SoftEther VPN Server
+echo "Downloading SoftEther VPN Server..."
+curl -L $SOFTETHER_URL -o softether-vpnserver.tar.gz
 
-# Download SoftEther | Version 4.43 | Build 9799
-printf "\nDownloading release: ${RED}4.43 RTM${NC} | Build ${RED}9799${NC}\n\n"
-wget -O vpnserver.tar.gz https://www.softether-download.com/files/softether/v4.43-9799-beta-2023.08.31-tree/Linux/SoftEther_VPN_Client/64bit_-_Intel_x64_or_AMD64/softether-vpnclient-v4.43-9799-beta-2023.08.31-linux-x64-64bit.tar.gz
+# Extract the downloaded archive
+echo "Extracting SoftEther VPN Server..."
+tar -xzvf softether-vpnserver.tar.gz
 
-# Extract the archive
-tar -xzf vpnserver.tar.gz
+# Move to the VPN server directory
 cd vpnserver
 
 # Build SoftEther VPN Server
-echo $'1\n1\n1' | make
+echo "Building SoftEther VPN Server..."
+make
 
-# Move to /opt directory
-cd /tmp/softether-autoinstall && mv vpnserver/ /opt
+# Move VPN Server files to the install directory
+echo "Installing SoftEther VPN Server to $INSTALL_DIR..."
+mkdir -p $INSTALL_DIR
+mv vpnserver vpncmd hamcore.se2 $INSTALL_DIR
 
-# Set proper permissions for vpnserver binaries
-chmod 600 /opt/vpnserver/*
-chmod 700 /opt/vpnserver/vpncmd
-chmod 700 /opt/vpnserver/vpnserver
+# Set appropriate permissions
+echo "Setting permissions..."
+chmod 600 $INSTALL_DIR/*
+chmod 700 $INSTALL_DIR/vpnserver
+chmod 700 $INSTALL_DIR/vpncmd
 
-# Create a systemd service file for SoftEther VPN Server
-cat <<EOF > /etc/systemd/system/vpnserver.service
+# Create systemd service file
+echo "Creating systemd service file..."
+cat > /etc/systemd/system/vpnserver.service <<EOF
 [Unit]
 Description=SoftEther VPN Server
 After=network.target
 
 [Service]
 Type=forking
-ExecStart=/opt/vpnserver/vpnserver start
-ExecStop=/opt/vpnserver/vpnserver stop
-ExecReload=/opt/vpnserver/vpnserver restart
-WorkingDirectory=/opt/vpnserver
+ExecStart=$INSTALL_DIR/vpnserver start
+ExecStop=$INSTALL_DIR/vpnserver stop
+ExecReload=$INSTALL_DIR/vpnserver restart
+WorkingDirectory=$INSTALL_DIR
 Restart=always
-RestartSec=3
 
 [Install]
 WantedBy=multi-user.target
 EOF
 
-# Reload systemd to register the new service
+# Reload systemd and enable the service
+echo "Enabling and starting VPN Server service..."
 systemctl daemon-reload
-
-# Enable the service to start at boot
 systemctl enable vpnserver
-
-# Start the SoftEther VPN Server service
 systemctl start vpnserver
 
 # Clean up installation files
-cd && rm -rf /tmp/softether-autoinstall > /dev/null 2>&1
+cd ..
+rm -rf vpnserver softether-vpnserver.tar.gz
 
-# Check if service is running
-if systemctl is-active --quiet vpnserver; then
-  echo -e "${GREEN}Service vpnserver is running.${NC}"
-else
-  echo -e "${RED}Failed to start vpnserver service.${NC}"
-fi
+# Show VPN server status
+systemctl status vpnserver
 
-echo "Done."
+echo "SoftEther VPN Server installation completed successfully!"
+echo "You can now configure the server using $INSTALL_DIR/vpncmd."
+
