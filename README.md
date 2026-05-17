@@ -16,6 +16,14 @@ To install SoftEther VPN Server using the `se-install.sh` script, you can run th
 bash <(curl -Ls https://raw.githubusercontent.com/DrSaeedHub/SoftetherFastInstall/main/se-install.sh)
 ```
 
+## Uninstallation
+
+To fully uninstall SoftEther VPN Server, stop and disable the service, and remove the installed files, run:
+
+```bash
+bash <(curl -Ls https://raw.githubusercontent.com/DrSaeedHub/SoftetherFastInstall/main/se-install.sh) --uninstall
+```
+
 ## What the Script Does
 
 1. Checks for necessary packages and installs them if they are missing (e.g., `build-essential`, `checkinstall`).
@@ -23,6 +31,8 @@ bash <(curl -Ls https://raw.githubusercontent.com/DrSaeedHub/SoftetherFastInstal
 3. Compiles and installs the VPN server.
 4. Configures the VPN server to start automatically as a system service.
 5. Performs cleanup after installation.
+
+When run with `--uninstall`, the script stops and disables the `vpnserver` service, removes the systemd service file, deletes the SoftEther install directory, removes old init scripts, clears temporary install files, and reloads systemd.
 
 ## Post-Installation
 
